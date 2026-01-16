@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 网页标题修改位置 / Page Title Modification Location -->
+    <title>DiebuAtelier</title>
+    <!-- 引入外部样式表 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Silkscreen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- 网页图标修改位置 / Favicon Modification Location -->
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <!-- 引入外部脚本文件 -->
+    <script src="js/main.js"></script>
+</head>
+
+<body data-page="sample">
+    <div class="page">
+        <div class="sidebar">
+            <div class="sidebar-top">
+                <a href="index.html" class="logo-circle">
+                    <img src="assets/logo.png" alt="Logo" class="logo-img">
+                </a>
+
+
+                <nav class="sidebar-nav">
+                    <a href="sample.html" class="nav-button">sample</a>
+                    <a href="commission.html" class="nav-button">commission</a>
+                    <a href="other.html" class="nav-button">其他事项</a>
+                </nav>
+                <div class="sidebar-lang">
+                    <div class="lang-toggle">
+                        <a href="#" class="lang-link" data-lang="CN">CN</a>
+                        <span>/</span>
+                        <a href="#" class="lang-link" data-lang="JP">JP</a>
+                        <span>/</span>
+                        <a href="#" class="lang-link" data-lang="EN">EN</a>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-bottom">
+                <div class="sidebar-player">
+
+                    <audio class="audio-player" controls>
+                        <source src="" type="audio/mpeg">
+                        <span class="player-text-fallback">您的浏览器不支持音频元素。</span>
+                    </audio>
+                </div>
+            </div>
+        </div>
+        <main class="content">
+            <div class="banner">
+                <div class="banner-placeholder"></div>
+            </div>
+            <div class="main-content">
+                <!-- 双选项胶囊切换器 -->
+                <div class="pill-toggle-container">
+                    <div class="pill-toggle" id="pillToggle">
+                        <!-- 轨道背景层 (用于显示非激活侧的半透明图案) -->
+                        <div class="track-bg-layer track-layer-a"></div>
+                        <div class="track-bg-layer track-layer-b"></div>
+
+                        <!-- 选中底图容器 -->
+                        <div class="pill-toggle-bg" id="pillToggleBg">
+                            <!-- 背景动画层 -->
+                            <div class="pill-bg-layer layer-a" id="pillLayerA"></div>
+                            <div class="pill-bg-layer layer-b" id="pillLayerB"></div>
+                        </div>
+
+                        <!-- 选项内容 -->
+                        <div class="pill-toggle-option pill-toggle-option-a" id="pillOptionA">
+                            <span class="pill-toggle-text">随心所欲的画</span>
+                        </div>
+                        <div class="pill-toggle-option pill-toggle-option-b" id="pillOptionB">
+                            <span class="pill-toggle-text">精致的画</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 内容显示区域 -->
+                <div class="pill-content-container">
+                    <div class="pill-content pill-content-a" id="pillContentA">
+                        <!-- 1. 描述文本框 (灰色背景) -->
+                        <div class="sample-description-box">
+                            <p class="desc-line" id="sampleDesc1">· 此类委托完成度偏低，存在色彩漏涂与溢出，与尚未擦除的错线。</p>
+                            <p class="desc-line" id="sampleDesc2">· 我不会向您交付透明底png，但您依然可以获得它的psd。</p>
+                            <p class="desc-line" id="sampleDesc3">· 所有的该类型业务都会直接向您提交成品文件，没有中途确认的步骤。</p>
+                        </div>
+
+                        <!-- 2. 图片轮播组件 -->
+                        <div class="carousel-container">
+                            <!-- 左侧导航箭头 -->
+                            <div class="carousel-nav carousel-prev" id="carouselPrev">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <rect x="14" y="6" width="2" height="2" />
+                                    <rect x="12" y="8" width="2" height="2" />
+                                    <rect x="10" y="10" width="2" height="4" />
+                                    <rect x="12" y="14" width="2" height="2" />
+                                    <rect x="14" y="16" width="2" height="2" />
+                                </svg>
+                            </div>
+
+                            <!-- 轮播可视区域 -->
+                            <div class="carousel-track-container">
+                                <div class="carousel-track" id="carouselTrack">
+                                    <!-- 动态插入滑块 -->
+                                </div>
+                            </div>
+
+                            <!-- 右侧导航箭头 -->
+                            <div class="carousel-nav carousel-next" id="carouselNext">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <rect x="8" y="6" width="2" height="2" />
+                                    <rect x="10" y="8" width="2" height="2" />
+                                    <rect x="12" y="10" width="2" height="4" />
+                                    <rect x="10" y="14" width="2" height="2" />
+                                    <rect x="8" y="16" width="2" height="2" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- 3. 底部详细信息 -->
+                        <div class="sample-details">
+                            <div class="sample-title-large" id="sampleTitleLarge">A</div>
+                            <div class="sample-price-row">
+                                <span class="price-label" id="samplePriceLabel">价格：</span>
+                                <span class="price-value" id="samplePrice">xxx</span>
+                                <span class="price-currency">CNY</span>
+                            </div>
+                            <div class="sample-more-hint" id="sampleMoreHint">点击例图可以查看更多 同类型例图</div>
+                        </div>
+                    </div>
+                    <div class="pill-content pill-content-b" id="pillContentB">
+                        <h2>Sample-B 内容</h2>
+                        <p>这里是精致的画的展示区域</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
