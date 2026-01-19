@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 1. 引入外部样式表 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Silkscreen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- 网页图标修改位置 -->
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <title>DiebuAtelier - Sample</title>
+    <!-- 2. 引入外部脚本文件 -->
+    <script src="js/main.js"></script>
+</head>
+
+<body data-page="sample">
+    <div class="page">
+        <div class="sidebar">
+            <div class="sidebar-toggle" id="sidebarToggle"></div>
+            <div class="sidebar-top">
+                <a href="index.html" class="logo-circle">
+                    <img src="assets/logo.png" alt="Logo" class="logo-img">
+                </a>
+
+                <nav class="sidebar-nav">
+                    <!-- 导航按钮 -->
+                    <a href="sample.html" class="nav-button">sample</a>
+                    <a href="commission.html" class="nav-button">commission</a>
+                    <a href="other.html" class="nav-button">其他事项</a>
+                </nav>
+
+                <div class="sidebar-lang">
+                    <div class="lang-toggle">
+                        <a href="#" class="lang-link" data-lang="CN">CN</a>
+                        <span>/</span>
+                        <a href="#" class="lang-link" data-lang="JP">JP</a>
+                        <span>/</span>
+                        <a href="#" class="lang-link" data-lang="EN">EN</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-player">
+                    <div class="custom-desktop-player">
+                        <div class="desk-controls">
+                            <button class="desk-btn-control" id="deskPrevBtn" aria-label="Previous">
+                                <div class="desk-icon-prev"></div>
+                            </button>
+                            <button class="desk-btn-play" id="deskPlayBtn" aria-label="Play">
+                                <div class="desk-icon-play"></div>
+                            </button>
+                            <button class="desk-btn-control" id="deskNextBtn" aria-label="Next">
+                                <div class="desk-icon-next"></div>
+                            </button>
+                        </div>
+                        <div class="desk-progress-wrapper" id="deskProgressWrapper">
+                            <div class="desk-progress-track">
+                                <div class="desk-progress-fill" id="deskProgressFill"></div>
+                            </div>
+                            <input type="range" class="desk-seek-slider" id="deskSeekSlider" min="0" max="100"
+                                value="0">
+                        </div>
+                    </div>
+                    <div class="desk-track-title" id="deskTrackTitle">Loading...</div>
+                    <audio class="audio-player" id="mainAudio">
+                        <source src="" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+
+        <main class="content">
+            <div class="banner">
+                <div class="banner-placeholder"></div>
+            </div>
+
+            <!-- 胶囊切换器 Pill Toggle (Moved Outside) -->
+            <div class="pill-toggle-container">
+                <div class="pill-toggle" id="pillToggle">
+                    <!-- 轨道背景层 (用于显示非激活侧的半透明图案) -->
+                    <div class="track-bg-layer track-layer-a"></div>
+                    <div class="track-bg-layer track-layer-b"></div>
+
+                    <!-- 选中底图容器 -->
+                    <div class="pill-toggle-bg" id="pillToggleBg">
+                        <!-- 背景动画层 -->
+                        <div class="pill-bg-layer layer-a" id="pillLayerA"></div>
+                        <div class="pill-bg-layer layer-b" id="pillLayerB"></div>
+                    </div>
+
+                    <!-- 选项的内容 -->
+                    <div class="pill-toggle-option pill-toggle-option-a" id="pillOptionA">
+                        <span class="pill-toggle-text">随心所欲的画</span>
+                    </div>
+
+                    <!-- 选项 B -->
+                    <div class="pill-toggle-option pill-toggle-option-b" id="pillOptionB">
+                        <span class="pill-toggle-text">精致的画</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pill-content-container">
+
+                <!-- 描述文本框 -->
+                <div class="sample-description-box">
+                    <!-- State A 内容 -->
+                    <div id="pillContentA">
+                        <p class="desc-line" id="sampleDesc1">· 此类委托完成度偏低，存在色彩漏涂与溢出，与尚未擦除的错线。</p>
+                        <p class="desc-line" id="sampleDesc2">· 我不会向您交付透明底png，但您依然可以获得它的psd。</p>
+                        <p class="desc-line" id="sampleDesc3">· 所有的该类型业务都会直接向您提交成品文件，没有中途确认的步骤。</p>
+                        <p class="desc-line" style="margin-top: 15px; font-weight: bold;">
+                        </p>
+                        <p class="desc-line" style="margin-top: 5px; font-size: 12px; color: #999;" id="sampleMoreHint">
+                            点击例图可以查看更多同类型例图
+                        </p>
+                    </div>
+
+                    <!-- State B 内容 -->
+                    <div id="pillContentB" style="display: none;">
+                        <p class="desc-line" id="sampleDesc1B">· 此类委托完成度较高，我会仔细的尽可能避免错线，颜色漏涂与溢出。</p>
+                        <p class="desc-line" id="sampleDesc2B">· 我可以向您提供透明底png，您也可以获得psd文件，但需要您在来信中提出这一要求。</p>
+                        <p class="desc-line" id="sampleDesc3B">· 所有的该类型业务都会像您发送草稿，在您确认通过后，我会将其推进至成品文件并交付。</p>
+                        <p class="desc-line" style="margin-top: 15px; font-weight: bold;">
+                        </p>
+                        <p class="desc-line" style="margin-top: 5px; font-size: 12px; color: #999;"
+                            id="sampleMoreHintB">
+                            点击例图可以查看更多同类型例图
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 轮播组件容器 -->
+                <!-- State A Carousel -->
+                <!-- 注意：layer-a 和 layer-b 类用于背景进场动画，需要配合JS逻辑 -->
+                <div class="carousel-wrapper-a" id="carouselWrapperA">
+                    <div class="carousel-container">
+                        <button class="carousel-nav nav-prev" id="carouselPrevA">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="square" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <div class="carousel-track" id="carouselTrackA">
+                            <!-- Slides generated by JS -->
+                        </div>
+                        <button class="carousel-nav nav-next" id="carouselNextA">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="square"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Caption for State A -->
+                    <div class="carousel-caption" id="carouselCaptionA">
+                        <div class="caption-name" id="captionNameA">A</div>
+                        <div class="caption-price">
+                            <span class="price-label">价格：</span>
+                            <span class="price-val price-font" id="captionPriceA">300</span>
+                            <span class="price-unit price-font">CNY</span>
+                        </div>
+                        <div class="caption-hint">点击例图可以查看更多同类型例图</div>
+                    </div>
+                </div>
+
+                <!-- State B Carousel -->
+                <!-- 初始通过 layer-exit 隐藏 -->
+                <div class="carousel-wrapper-b" id="carouselWrapperB" style="display: none;">
+                    <div class="carousel-container">
+                        <button class="carousel-nav nav-prev" id="carouselPrevB">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="square" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <div class="carousel-track" id="carouselTrackB">
+                            <!-- Slides generated by JS -->
+                        </div>
+                        <button class="carousel-nav nav-next" id="carouselNextB">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="square"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Caption for State B -->
+                    <div class="carousel-caption" id="carouselCaptionB">
+                        <div class="caption-name" id="captionNameB">H</div>
+                        <div class="caption-price">
+                            <span class="price-label">价格：</span>
+                            <span class="price-val price-font" id="captionPriceB">1800</span>
+                            <span class="price-unit price-font">CNY</span>
+                        </div>
+                        <div class="caption-hint">点击例图可以查看更多同类型例图</div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- 初始化轮播数据的脚本 -->
+</body>
+
+</html>

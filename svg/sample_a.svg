@@ -1,0 +1,4 @@
+﻿<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#FFEFF5"/>
+  <text x="50%" y="50%" font-family="monospace" font-size="100" font-weight="bold" fill="#888888" dominant-baseline="middle" text-anchor="middle">A</text>
+</svg>

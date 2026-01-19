@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiebuAtelier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Silkscreen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <script src="js/main.js"></script>
+</head>
+
+<body data-page="sample-detail">
+    <div class="page">
+        <div class="sidebar">
+            <div class="sidebar-toggle" id="sidebarToggle"></div>
+            <div class="sidebar-top">
+                <a href="index.html" class="logo-circle">
+                    <img src="assets/logo.png" alt="Logo" class="logo-img">
+                </a>
+
+                <nav class="sidebar-nav">
+                    <a href="sample.html" class="nav-button">sample</a>
+                    <a href="commission.html" class="nav-button">commission</a>
+                    <a href="other.html" class="nav-button">鍏朵粬浜嬮」</a>
+                </nav>
+
+                <div class="sidebar-lang">
+                    <div class="lang-toggle">
+                        <a href="#" class="lang-link" data-lang="CN">CN</a>
+                        <span>/</span>
+                        <a href="#" class="lang-link" data-lang="JP">JP</a>
+                        <span>/</span>
+                        <a href="#" class="lang-link" data-lang="EN">EN</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-player">
+                    <div class="custom-desktop-player">
+                        <div class="desk-controls">
+                            <button class="desk-btn-control" id="deskPrevBtn" aria-label="Previous">
+                                <div class="desk-icon-prev"></div>
+                            </button>
+                            <button class="desk-btn-play" id="deskPlayBtn" aria-label="Play">
+                                <div class="desk-icon-play"></div>
+                            </button>
+                            <button class="desk-btn-control" id="deskNextBtn" aria-label="Next">
+                                <div class="desk-icon-next"></div>
+                            </button>
+                        </div>
+                        <div class="desk-progress-wrapper" id="deskProgressWrapper">
+                            <div class="desk-progress-track">
+                                <div class="desk-progress-fill" id="deskProgressFill"></div>
+                            </div>
+                            <input type="range" class="desk-seek-slider" id="deskSeekSlider" min="0" max="100"
+                                value="0">
+                        </div>
+                    </div>
+                    <div class="desk-track-title" id="deskTrackTitle">Loading...</div>
+                    <audio class="audio-player" id="mainAudio">
+                        <source src="" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+        <main class="content">
+            <div class="banner">
+                <div class="banner-placeholder"></div>
+            </div>
+            <div class="main-content">
+                <div class="back-link-container">
+                    <a href="sample.html" class="back-link">←返回</a>
+                </div>
+                <div class="detail-content">
+                    <h1 style="text-align: center; color: #888; margin: 40px 0;">作品 A 详情页</h1>
+                    <p style="text-align: center; color: #999;">此页面内容待布置</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
