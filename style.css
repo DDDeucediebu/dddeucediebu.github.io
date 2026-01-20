@@ -2196,3 +2196,627 @@ body[data-page="sample"] .main-content {
     font-size: 12px;
     margin-top: 5px;
 }
+
+/* =========================================
+   Commission Page Styles (委托页面样式)
+   ========================================= */
+
+/* Commission Specific Variables */
+.comm-container {
+    --comm-pink-title: #ff85a1;
+    /* 标题粉色 */
+    --comm-pink-bg: #fff0f5;
+    /* 浅粉色背景 */
+    --comm-text-main: #555555;
+    /* 正文深灰 */
+    --comm-highlight: #ff6b8b;
+    /* 高亮强调色 */
+
+    max-width: 900px;
+    margin: -30px auto 0;
+    /* 向上移动，减少与 banner 的距离 */
+    padding: 20px 40px;
+    background-color: #f7f7f7;
+    /* 修改为 247, 247, 247 */
+    border-radius: 8px;
+    /* 增加圆角使其更自然 */
+}
+
+/* 顶部大标题容器 */
+.comm-header-wrapper {
+    display: flex;
+    justify-content: center;
+    /* 标题居中 */
+    margin-bottom: 30px;
+    /* 稍微减小下边距 */
+    margin-top: 0;
+    /* 移除上边距以提升位置 */
+}
+
+/* 顶部标题样式 (如：委托注意事项) */
+.comm-header {
+    background-color: var(--comm-pink-bg);
+    color: var(--comm-pink-title);
+    padding: 12px 40px;
+    font-size: 24px;
+    font-weight: bold !important;
+    /* 强制加粗，覆盖全局 reset */
+    letter-spacing: 2px;
+    box-shadow: 0 2px 0 rgba(255, 180, 210, 0.3);
+    /* 轻微的立体感 */
+}
+
+/* 内容板块 */
+.comm-section {
+    margin-bottom: 35px;
+    text-align: left;
+    /* 正文左对齐 */
+}
+
+/* 板块标题 (如：禁止事项) */
+.comm-title {
+    color: var(--comm-pink-title);
+    font-size: 20px;
+    margin-bottom: 15px;
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+    /* 预留 */
+}
+
+/* 列表样式 */
+.comm-list {
+    list-style: none;
+    /* 移除默认圆点 */
+    padding-left: 10px;
+}
+
+.comm-list li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 8px;
+    color: var(--comm-text-main);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* 自定义列表点 (使用小点) */
+.comm-list li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: var(--comm-text-main);
+    font-weight: bold;
+}
+
+/* 高亮文本 */
+.comm-highlight {
+    color: var(--comm-highlight);
+    background-color: rgba(255, 240, 245, 0.5);
+    /* 极淡的背景增加可读性 */
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/*
+   折叠功能样式
+   Toggle Button & Hidden Content
+*/
+.comm-toggle-btn {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--comm-highlight);
+    /* 粉色倒三角 */
+    border-bottom: none;
+    background: none;
+    cursor: pointer;
+    margin-left: 8px;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+    /* 旋转动画 */
+    padding: 0;
+}
+
+.comm-toggle-btn.active {
+    transform: rotate(180deg);
+    /* 翻转朝上 */
+}
+
+.comm-hidden-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease;
+    padding-left: 0;
+    margin-top: 5px;
+    color: #666;
+}
+
+.comm-hidden-content.active {
+    max-height: 500px;
+    /* 足够展示内容的高度 */
+    opacity: 1;
+}
+
+/* 底部跳转链接 */
+/* 底部跳转链接 */
+.comm-footer-link {
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+    /* 移出容器后保持40px间距 */
+    color: #ff85a1;
+    text-decoration: underline;
+    font-weight: bold;
+    padding-bottom: 40px;
+    /* 增加底部留白，避免贴底 */
+    font-size: 16px;
+    transition: opacity 0.3s;
+}
+
+/* =========================================
+   委托申请页面 (Request Page) 样式
+   ========================================= */
+
+/* 顶部邮箱头部 */
+/* 顶部邮箱头部 */
+/* 顶部邮箱头部 */
+.req-email-header {
+    width: 100%;
+    height: 140px;
+    /* 增加高度以完全包裹 */
+    background-image: url('assets/em.png');
+    /* 引用花纹 */
+    background-repeat: repeat;
+    /* 允许平铺 */
+    background-position: center;
+    /* 居中 */
+    background-size: auto 120px;
+    /* 放大花纹比例 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-top: -20px;
+    /* 视觉上移，与Commission页面对齐 */
+
+}
+
+.req-email-text {
+    font-family: 'Checkbook', 'Zpix', monospace;
+    /* 像素字体 */
+    font-size: 24px;
+    color: #ff6b8b;
+    /* 浅粉色描边模拟 (Text Shadow) */
+    text-shadow:
+        1px 1px 0 #ffd1dc,
+        -1px 1px 0 #ffd1dc,
+        1px -1px 0 #ffd1dc,
+        -1px -1px 0 #ffd1dc;
+    letter-spacing: 1px;
+}
+
+/* 灰色主容器 */
+.req-container {
+    background-color: #f7f7f7;
+    padding: 40px;
+    border-radius: 8px;
+    position: relative;
+    /* 用于定位左上角标签 */
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 左上角 “一般委托” 标签 */
+.req-top-label {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 14px;
+    color: #ff85a1;
+    font-weight: bold;
+    cursor: pointer;
+    /* 变为手型指针 */
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    user-select: none;
+}
+
+.req-top-label:hover {
+    background-color: #fff0f5;
+}
+
+.req-top-label::after {
+    content: " ▶";
+    font-size: 10px;
+    vertical-align: middle;
+}
+
+/* Tooltip 提示 */
+.req-tooltip {
+    visibility: hidden;
+    background-color: #ff6b8b;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 10;
+    top: -35px;
+    /* 上方显示 */
+    left: 0;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.req-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    /* Arrow at bottom */
+    left: 20px;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #ff6b8b transparent transparent transparent;
+}
+
+.req-top-label:hover .req-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 表单隐藏状态 */
+.form-hidden {
+    display: none;
+}
+
+/* 标题 "个人委托需求详情表单" */
+.req-title {
+    text-align: center;
+    color: #ff85a1;
+    font-size: 24px;
+    margin-bottom: 40px;
+    background-color: #fff0f5;
+    /* 浅粉底色块 */
+    display: inline-block;
+    padding: 10px 30px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    /* 确保块居中 */
+}
+
+/* 表单网格布局 */
+/* 表单网格布局 */
+.req-form-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    /* 左侧标签固定宽，右侧自适应 */
+    gap: 15px;
+    align-items: center;
+    /* 默认垂直居中对齐 (针对单行文本框) */
+    margin-bottom: 40px;
+}
+
+.req-label {
+    text-align: right;
+    /* 标签右对齐 */
+    color: #555;
+    font-weight: bold;
+    font-size: 16px;
+    /* 移除统一的 padding-top */
+}
+
+/* 针对多行文本域的标签，需顶部对齐 */
+.req-label-top {
+    align-self: start;
+    padding-top: 10px;
+    /* 对齐文本域的第一行文字 */
+}
+
+/* 所有的输入框和文本域 */
+.req-input {
+    width: 100%;
+    background-color: #eeeeee;
+    /* 灰色背景 */
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #333;
+    border-radius: 2px;
+    box-sizing: border-box;
+    font-family: 'Zpix', sans-serif;
+    line-height: 1.6;
+    /* 修复字符底部被裁剪的问题 */
+}
+
+.req-input:focus {
+    outline: 2px solid #ffccdd;
+    background-color: #fff;
+}
+
+/* 多行文本域特定高度 */
+.req-textarea {
+    height: 120px;
+    /* 稍微增高一点以容纳更多行的提示 */
+    resize: vertical;
+    line-height: 1.6;
+    /* 关键修复：增加行间距 (默认通常是 1.2 或 normal) */
+    padding-top: 12px;
+    /* 增加顶部内边距 */
+}
+
+/* Placeholder 样式 (斜体，输入后消失由浏览器处理) */
+.req-input::placeholder {
+    color: #999;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* 固定文本字段 (粉色) */
+.req-text-pink {
+    color: #ff85a1;
+    font-size: 14px;
+    padding: 10px 15px;
+    /* 增加左右内边距以对齐输入框文字 (15px) */
+    font-family: 'Zpix', sans-serif;
+    align-self: center;
+    /* 确保在 Grid 中垂直居中 */
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 底部操作区容器 */
+.req-footer {
+    display: flex;
+    justify-content: flex-end;
+    /* 整体靠右 */
+    align-items: center;
+    /* 垂直居中对齐 */
+    gap: 15px;
+    /* 较窄的间距 */
+    margin-top: 40px;
+    /* 增加与表格的间距 */
+    max-width: 800px;
+    margin: 40px auto;
+    /* 上下40px，居中 */
+    padding: 0 40px;
+    /* 保持与表格对齐 */
+}
+
+
+
+/* 左侧说明文字 */
+/* 左侧说明文字 */
+.req-instructions {
+    text-align: left;
+    font-size: 14px;
+    color: #ff85a1;
+    /* 粉色文字 */
+    line-height: 1.8;
+    list-style: none;
+    /* 移除默认列表 */
+    padding: 0;
+}
+
+/* 底部返回链接容器 */
+.req-back-wrapper {
+    max-width: 800px;
+    margin: 15px auto 40px;
+    /* 上方保留15px呼吸距，下方留白 */
+    text-align: left;
+    padding: 0 0px;
+    /* 与上方的 footer 保持一致的内边距，确保对齐 */
+    box-sizing: border-box;
+}
+
+.back-link-bottom {
+    font-family: 'Zpix', sans-serif;
+    color: #FFB6C1;
+    /* 浅粉色 - 与顶部返回键一致 */
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    padding: 2px 5px;
+}
+
+.back-link-bottom:hover {
+    color: #FF6B9D;
+    /* 悬停颜色加深 */
+    transform: translateX(-3px);
+    /* 轻微向左移动 */
+    text-shadow: 0 0 5px rgba(255, 107, 157, 0.2);
+    /* 移除可能存在的下划线，保持与顶部一致 */
+    text-decoration: none;
+    opacity: 1;
+}
+
+.req-instructions li {
+    display: flex;
+    /* 使用 Flex 布局确保对齐 */
+    align-items: baseline;
+}
+
+.req-instructions li::before {
+    /* 自定义数字 */
+    content: attr(data-index);
+    width: 20px;
+    /* 固定宽度确保数字对齐 */
+    text-align: right;
+    /* 数字靠右显得整齐 */
+    margin-right: 10px;
+}
+
+/* 复制按钮 */
+.req-copy-btn {
+    background-color: #fff0f5;
+    /* 浅粉背景 */
+    color: #ff6b8b;
+    font-size: 24px;
+    font-weight: normal;
+    /* 取消加粗 */
+    border: none;
+    padding: 15px 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Zpix', sans-serif;
+    box-shadow: 2px 2px 0 rgba(255, 180, 210, 0.5);
+}
+
+.req-copy-btn:hover {
+    background-color: #ffe4e9;
+    transform: translateY(-2px);
+    box-shadow: 2px 4px 5px rgba(255, 180, 210, 0.3);
+}
+
+/* 按钮和消息的垂直列 */
+.req-action-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    /* 为绝对定位的消息做准备(如果不使用flex占位) */
+}
+
+/* 消息提示 (居中上方) */
+.req-message {
+    color: #ff85a1;
+    /* 粉色文字 */
+    font-size: 14px;
+    /* 小号字体 */
+    margin-bottom: 10px;
+    /* 距离按钮的间距 */
+    height: 20px;
+    /* 固定高度防止抖动 */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: 'Zpix', sans-serif;
+    /* 保持字体一致 */
+    white-space: nowrap;
+}
+
+.req-message.show {
+    opacity: 1;
+}
+
+/* =========================================
+   请求页移动端优化 (Request Page Mobile Optimization)
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* 1. 容器减负 */
+    .req-container {
+        padding: 20px 15px;
+        /* 减少内边距 */
+    }
+
+    /* 2. 标题优化：解除居中Hack，允许自然换行 */
+    .req-title {
+        display: block;
+        /* 块级显示 */
+        width: auto;
+        /* 自动宽度 */
+        margin: 50px auto 30px;
+        /* 增加上方间距(50px)以避开绝对定位的按钮 */
+        transform: none;
+        /* 移除位移 */
+        white-space: normal;
+        /* 允许换行 */
+        line-height: 1.4;
+        /* 增加行高 */
+        word-break: break-word;
+        /* 允许在单词内换行 */
+        font-size: 20px;
+        /* 稍微调小字号 */
+        padding: 10px 15px;
+        /* 减少内边距 */
+    }
+
+    /* 3. 表单网格转为垂直堆叠 */
+    .req-form-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        /* 增加垂直间距 */
+        align-items: stretch;
+        /* 关键：拉伸项目，确保子元素占满宽度，而不是居中 */
+    }
+
+    /* 4. 标签改为左对齐 */
+    .req-label {
+        text-align: left;
+        /* 强制左对齐 */
+        margin-bottom: -5px;
+        /* 紧贴下方输入框 */
+        font-size: 14px;
+        width: 100%;
+        /* 标签全宽 */
+        padding-top: 0;
+    }
+
+    .req-label-top {
+        padding-top: 0;
+    }
+
+    /* 5. 输入框全宽 */
+    .req-input,
+    .req-textarea {
+        width: 100% !important;
+        /* 强制全宽 */
+        font-size: 14px;
+    }
+
+    width: 100%;
+    /* 按钮全宽 */
+}
+
+.req-instructions {
+    width: 100%;
+}
+
+/* 7. 顶部切换按钮优化 (防止遮挡标题) */
+.req-top-label {
+    position: absolute;
+    /* 回归绝对定位，不占用文档流高度 */
+    top: 20px;
+    /* 与 desktop 保持一致或微调 */
+    left: 15px;
+    /* 对齐移动端内边距 */
+    margin: 0;
+    /* 清除 margin */
+    width: auto;
+    /* 自动宽度 */
+    display: inline-block;
+    transform: none;
+}
+
+/* 8. 播放器居中优化 (Narrow Screen Player Centering) */
+.sidebar-player {
+    display: flex;
+    /* 启用 Flex 布局 */
+    justify-content: center;
+    /* 水平居中 */
+    align-items: center;
+    /* 垂直居中 */
+    width: 100%;
+    /* 占满容器宽 */
+    margin: 0 auto;
+    /* 自身居中 */
+}
+
+.custom-desktop-player {
+    margin: 0 auto;
+    /* 确保内部胶囊也居中 */
+}
+}

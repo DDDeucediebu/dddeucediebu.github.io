@@ -2,6 +2,26 @@
  * ======================================================================================
  * 个人网站核心逻辑文件 (main.js)
  * ======================================================================================
+ * 
+ * [CRITICAL ENGINEERING GUIDELINES FOR AI AGENTS & DEVELOPERS]
+ * 
+ * 1. SPA ARCHITECTURE (Single Page Application):
+ *    - This website acts as a SPA to keep the music player (audio element) continuous.
+ *    - DO NOT use `window.location.href`, `window.location.assign()`, or `window.reload()`.
+ *    - DO NOT use standard synchronous form submissions that reload the page.
+ * 
+ * 2. NAVIGATION RULES:
+ *    - ALWAYS use standard `<a href="...">` tags for navigation links.
+ *    - The `initRouter` function in this file automatically intercepts all local `<a>` clicks.
+ *    - If you must navigate programmatically, use `loadPage(url)` function defined below.
+ *    - NEVER bind click events to `div` or `button` to perform navigation unless you call `loadPage(url)`.
+ *    - PREFER `<a href="...">` over `onclick="loadPage(...)"` for better SEO and accessibility.
+ * 
+ * 3. ADDING NEW PAGES:
+ *    - When creating a new HTML page, ensure it uses the same layout structure (Sidebar + .content).
+ *    - The `loadPage` function only replaces the `.content` element.
+ * 
+ * ======================================================================================
  * 说明：
  * 这个文件包含了网站的所有交互功能和文字内容。
  * 为了方便非程序员维护，所有显示的文字都集中在下方的 "translations" 变量中。
@@ -728,8 +748,6 @@ function createCarousel(config) {
 
     const prevBtn = document.getElementById(config.prevId);
     const nextBtn = document.getElementById(config.nextId);
-    // const titleEl = document.getElementById(config.titleId);
-    // const priceEl = document.getElementById(config.priceId);
 
     // 1. 渲染滑块
     renderSlides();
@@ -737,7 +755,7 @@ function createCarousel(config) {
     // 2. 初始化显示
     updateCarouselState();
 
-    // 3. 绑定事件
+    // 3. 绑定事件 (左右切换)
     if (prevBtn) {
         prevBtn.addEventListener('click', () => {
             currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
@@ -755,10 +773,15 @@ function createCarousel(config) {
     function renderSlides() {
         track.innerHTML = '';
         slidesData.forEach((item, index) => {
-            const slide = document.createElement('div');
-            // 复用 slide class，移除背景色类 (由图片决定)
+            // [SPA Refactor] Create <a> instead of <div> to allow global router interception
+            const slide = document.createElement('a');
             slide.className = `carousel-slide`;
             slide.setAttribute('data-index', index);
+
+            // Inline styles to prevent default anchor styling affecting layout
+            slide.style.textDecoration = 'none';
+            slide.style.color = 'inherit';
+            slide.style.cursor = 'default'; // Default cursor, updated in state
 
             // 创建图片元素
             const img = document.createElement('img');
@@ -769,9 +792,6 @@ function createCarousel(config) {
                 if (['a', 'b', 'c', 'd', 'e'].includes(idLower)) {
                     img.src = `assets/test_slide_${idLower}.svg`;
                 } else {
-                    // 对于 State B (H-L)，还没做图片，暂时用 placeholder 或复用 A-E
-                    // 为了演示，暂时映射 H->A, I->B 等，或者用 fallback
-                    // 用户说 "先专注 state A"，所以这里仅 A-E 有效
                     img.src = `assets/test_slide_a.svg`; // Fallback
                 }
             } else {
@@ -788,7 +808,6 @@ function createCarousel(config) {
                 const ratio = naturalW / naturalH;
 
                 // 设定基准面积：相当于 300x300 的正方形 (90,000 px²)
-                // 这个尺寸能很好地填满 400px 高度的容器
                 const targetArea = 300 * 300;
 
                 // 计算理想宽高
@@ -829,17 +848,24 @@ function createCarousel(config) {
 
         slides.forEach((slide, index) => {
             slide.classList.remove('slide-active', 'slide-prev', 'slide-next', 'slide-hidden');
-            slide.onclick = null; // 清除旧事件
+
+            // Clear specific logic
+            slide.removeAttribute('href');
+            slide.onclick = null;
+            slide.style.pointerEvents = 'none'; // Default: not interactive
 
             if (index === currentIndex) {
                 slide.classList.add('slide-active');
-                // 点击跳转逻辑
-                slide.onclick = () => {
-                    // 跳转链接 sample-a.html, sample-h.html 等
-                    // 假设文件名是 `sample-{id}.html` (小写)
-                    const link = `sample-${slidesData[currentIndex].id.toLowerCase()}.html`;
-                    window.location.href = link;
-                };
+                slide.style.pointerEvents = 'auto'; // Active slide is clickable
+
+                // [SPA Refactor] Set href so global router can catch it
+                // Logic: prefer item.link, fallback to constructed filename
+                const item = slidesData[index];
+                const link = item.link || `sample-${item.id.toLowerCase()}.html`;
+
+                slide.href = link;
+
+                // No manual onclick needed! Global router handles <a> clicks.
             }
             else if (index === (currentIndex - 1 + totalSlides) % totalSlides) {
                 slide.classList.add('slide-prev');
@@ -851,12 +877,6 @@ function createCarousel(config) {
                 slide.classList.add('slide-hidden');
             }
         });
-
-        // 更新详情文字
-        // 更新详情文字 (Deprecated: Old IDs removed from HTML)
-        // const currentItem = slidesData[currentIndex];
-        // if (titleEl) titleEl.textContent = currentItem.id;
-        // if (priceEl) priceEl.textContent = currentItem.price;
 
         // Update Caption if configured
         if (config.captionConfig) {
@@ -1041,9 +1061,309 @@ function initPageLogic() {
     } else if (pageType === 'sample') {
         initSamplePage();
         initAllCarousels();
+    } else if (pageType === 'commission') {
+        initCommissionPage();
+    } else if (pageType === 'commission-request') {
+        initCommissionRequest();
     }
 
     // 如果有其他页面特定逻辑，加在这里
+}
+
+/**
+ * 委托申请页面专用逻辑
+ * 1. 自动保存/恢复表单内容 (Auto-Save)
+ * 2. 绑定事件 (如果有)
+ */
+function initCommissionRequest() {
+    const forms = ['commissionForm', 'live2dCommissionForm'];
+
+    forms.forEach(formId => {
+        const form = document.getElementById(formId);
+        if (!form) return;
+
+        // 获取该表单下的所有输入框
+        const inputs = form.querySelectorAll('input, textarea');
+
+        inputs.forEach(input => {
+            const saveKey = 'draft_' + input.id;
+
+            // 1. 恢复保存的内容
+            const savedValue = localStorage.getItem(saveKey);
+            if (savedValue) {
+                input.value = savedValue;
+            }
+
+            // 2. 监听输入事件进行保存
+            input.addEventListener('input', () => {
+                localStorage.setItem(saveKey, input.value);
+            });
+        });
+    });
+
+    // 绑定清空草稿按钮 (可选，如果HTML里有的话。目前没有，暂不绑定)
+
+    // 重新绑定 Toggle 点击事件 (虽然是 onclick inline 调用，但在SPA重载后通常仍有效，
+    // 除非函数依赖的 DOM 引用失效。 toggleCommissionMode 重新获取getElement，所以它是安全的。)
+}
+
+/**
+ * 委托页面专用逻辑
+ * 处理折叠文本的展开/收起
+ */
+function initCommissionPage() {
+    const toggleBtns = document.querySelectorAll('.comm-toggle-btn');
+    toggleBtns.forEach(btn => {
+        // 移除旧的监听器防止重复绑定 (SPA特性)
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.addEventListener('click', function () {
+            // 切换按钮状态 (旋转动画)
+            this.classList.toggle('active');
+
+            // 切换紧邻的兄弟元素显示 (折叠内容)
+            const content = this.nextElementSibling;
+            if (content && content.classList.contains('comm-hidden-content')) {
+                content.classList.toggle('active');
+            }
+        });
+    });
+}
+
+/**
+ * 委托申请表单复制功能
+ */
+let currentCommissionMode = 'general'; // 'general' or 'live2d'
+
+/**
+ * 切换委托表单模式 (一般 <-> Live2D)
+ */
+function toggleCommissionMode() {
+    const generalForm = document.getElementById('generalFormContainer');
+    const live2dForm = document.getElementById('live2dFormContainer');
+    const toggleLabel = document.getElementById('formToggleLabel');
+    const tooltip = toggleLabel.querySelector('.req-tooltip');
+
+    if (currentCommissionMode === 'general') {
+        // 切换到 Live2D
+        currentCommissionMode = 'live2d';
+        generalForm.classList.add('form-hidden');
+        live2dForm.classList.remove('form-hidden');
+
+        toggleLabel.childNodes[0].textContent = "LIVE2D委托"; // 更新按钮文字，保留tooltip
+        tooltip.textContent = "点击切换至一般委托表单";
+    } else {
+        // 切换回 一般委托
+        currentCommissionMode = 'general';
+        live2dForm.classList.add('form-hidden');
+        generalForm.classList.remove('form-hidden');
+
+        toggleLabel.childNodes[0].textContent = "一般委托";
+        tooltip.textContent = "点击切换至LIVE2D专用表单";
+    }
+}
+
+/**
+ * 委托申请表单复制功能
+ */
+function _deprecated_copyCommissionForm() {
+    let formText = "";
+
+    if (currentCommissionMode === 'general') {
+        // 获取一般委托字段
+        const nickName = document.getElementById('nickName').value.trim();
+        const commType = document.getElementById('commType').value.trim();
+        const budget = document.getElementById('budget').value.trim();
+        const commercial = document.getElementById('commercial').value.trim();
+        const deadline = document.getElementById('deadline').value.trim();
+        const publishDate = document.getElementById('publishDate').value.trim();
+        const refLink = document.getElementById('refLink').value.trim();
+        const requiredInfo = document.getElementById('requiredInfo').value.trim();
+        const optionalInfo = document.getElementById('optionalInfo').value.trim();
+
+        formText = `
+个人委托需求详情表单
+--------------------------------
+客户昵称：${nickName}
+委托类型：${commType}
+报酬金额(CNY)：${budget}
+需要商业授权：${commercial}
+截稿日期：${deadline}
+作品发布日期：${publishDate}
+参考外链：${refLink}
+必要要求：${requiredInfo}
+次要要求：${optionalInfo}
+--------------------------------
+`;
+    } else {
+        // 获取Live2D委托字段
+        const nickName = document.getElementById('l2d_nickName').value.trim();
+        // 委托类型和商业授权是固定文本
+        const commType = "对称LIVE2D分层立绘";
+        const commercial = "默认获得盈利授权";
+
+        const budget = document.getElementById('l2d_budget').value.trim();
+        const payment = document.getElementById('l2d_payment').value.trim();
+        const deadline = document.getElementById('l2d_deadline').value.trim();
+        const review = document.getElementById('l2d_review').value.trim();
+        const publishDate = document.getElementById('l2d_publishDate').value.trim();
+        const refLink = document.getElementById('l2d_refLink').value.trim();
+        const outer = document.getElementById('l2d_outer').value.trim();
+        const expressions = document.getElementById('l2d_expressions').value.trim();
+        const gestures = document.getElementById('l2d_gestures').value.trim();
+        const requiredInfo = document.getElementById('l2d_requiredInfo').value.trim();
+        const optionalInfo = document.getElementById('l2d_optionalInfo').value.trim();
+
+        formText = `
+LIVE2D委托需求详情表单
+--------------------------------
+客户昵称：${nickName}
+报酬金额(CNY)：${budget}
+委托类型：${commType}
+需要商业授权：${commercial}
+支付方式：${payment}
+截稿日期：${deadline}
+检阅过程：${review}
+作品发布日期：${publishDate}
+参考外链：${refLink}
+外套穿脱：${outer}
+替换表情：
+${expressions}
+替换手势：
+${gestures}
+必要要求：
+${requiredInfo}
+次要要求：
+${optionalInfo}
+--------------------------------
+`;
+    }
+
+    // 复制到剪贴板
+    navigator.clipboard.writeText(formText).then(() => {
+        alert("表单内容已复制！请前往邮件粘贴发送。\n\n" + formText);
+    }).catch(err => {
+        console.error('复制失败:', err);
+        alert("复制失败，请手动复制。");
+    });
+}
+
+/**
+ * 委托申请表单复制功能 (优化版)
+ * 支持必填项验证和选填项默认值
+ */
+function copyCommissionForm() {
+    let formFields = [];
+    let title = "";
+
+    // 基础配置：定义字段结构
+    if (currentCommissionMode === 'general') {
+        title = "个人委托需求详情表单";
+        formFields = [
+            { id: 'nickName', label: '客户昵称', required: false },
+            { id: 'commType', label: '委托类型', required: true },
+            { id: 'budget', label: '报酬金额(CNY)', required: true },
+            { id: 'commercial', label: '需要商业授权', required: true },
+            { id: 'payment', label: '支付方式', required: true },
+            { id: 'deadline', label: '截稿日期', required: true },
+            { id: 'publishDate', label: '作品发布日期', required: false },
+            { id: 'refLink', label: '参考外链', required: false },
+            { id: 'requiredInfo', label: '必要要求', required: false },
+            { id: 'optionalInfo', label: '次要要求', required: false }
+        ];
+    } else {
+        title = "LIVE2D委托需求详情表单";
+        formFields = [
+            { id: 'l2d_nickName', label: '客户昵称', required: false },
+            { id: 'l2d_budget', label: '报酬金额(CNY)', required: true },
+            { type: 'fixed', label: '委托类型', value: '对称LIVE2D分层立绘' },
+            { type: 'fixed', label: '需要商业授权', value: '默认获得盈利授权' },
+            { id: 'l2d_payment', label: '支付方式', required: true },
+            { id: 'l2d_deadline', label: '截稿日期', required: true },
+            { id: 'l2d_review', label: '检阅过程', required: true },
+            { id: 'l2d_publishDate', label: '作品发布日期', required: false },
+            { id: 'l2d_refLink', label: '参考外链', required: false },
+            { id: 'l2d_outer', label: '外套穿脱', required: false },
+            { id: 'l2d_expressions', label: '替换表情', required: false },
+            { id: 'l2d_gestures', label: '替换手势', required: false },
+            { id: 'l2d_requiredInfo', label: '必要要求', required: false },
+            { id: 'l2d_optionalInfo', label: '次要要求', required: false }
+        ];
+    }
+
+    let resultText = title + "\n--------------------------------\n";
+    let missingFields = [];
+    const defaultNoneText = "无要求"; // 选填默认值
+    const errorMsg = "复制失败了，请填写所有必填内容!"; // 错误提示
+
+    for (let field of formFields) {
+        let value = "";
+        if (field.type === 'fixed') {
+            value = field.value;
+        } else {
+            const element = document.getElementById(field.id);
+            if (element) {
+                value = element.value.trim();
+            }
+        }
+
+        // 必填验证
+        if (field.required && !value) {
+            missingFields.push(field.label);
+            const el = document.getElementById(field.id);
+            if (el) {
+                el.style.outline = "2px solid red";
+                setTimeout(() => el.style.outline = "", 3000);
+            }
+            continue;
+        }
+
+        // 选填默认值
+        if (!value && !field.required) {
+            value = defaultNoneText;
+        }
+
+        // 拼接
+        if (value.includes('\n')) {
+            resultText += `${field.label}：\n${value}\n`;
+        } else {
+            resultText += `${field.label}：${value}\n`;
+        }
+    }
+
+    resultText += "--------------------------------\n";
+
+    if (missingFields.length > 0) {
+        showReqMessage(errorMsg);
+        return;
+    }
+
+    // 复制
+    navigator.clipboard.writeText(resultText).then(() => {
+        showReqMessage("复制成功了!◌ ｡˚✩(  ›   ̫ ‹ )✩˚ ｡◌");
+    }).catch(err => {
+        console.error('复制失败:', err);
+        showReqMessage("复制失败，请手动复制");
+    });
+}
+
+/**
+ * 显示表单提示消息
+ * @param {string} msg 消息内容
+ */
+function showReqMessage(msg) {
+    const msgEl = document.getElementById('req-message');
+    if (!msgEl) return;
+
+    msgEl.textContent = msg;
+    msgEl.classList.add('show');
+
+    // 3秒后自动隐藏
+    if (window.reqMsgTimeout) clearTimeout(window.reqMsgTimeout);
+    window.reqMsgTimeout = setTimeout(() => {
+        msgEl.classList.remove('show');
+    }, 3000);
 }
 
 /**
