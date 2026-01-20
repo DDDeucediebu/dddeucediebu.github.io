@@ -320,23 +320,6 @@ function switchLanguage(lang) {
     // 3. 更新网页标题 (浏览器标签页上的文字)
     // 网页标题设置 / Page Title Setting
     document.title = "DiebuAtelier";
-    /*
-    // 原有的动态标题逻辑已禁用，以保持全站统一
-    let pageTitlePrefix = "";
-    if (pageType === 'home') pageTitlePrefix = translations[lang].home_page_title;
-    else if (pageType === 'commission') pageTitlePrefix = translations[lang].commission_page_title;
-    else if (pageType === 'other') pageTitlePrefix = translations[lang].other_page_title;
-    else if (pageType === 'sample') pageTitlePrefix = translations[lang].sample_page_title;
-
-    // 如果没有特定前缀，通常不直接修改 document.title 为空，这里简单处理
-    if (pageTitlePrefix) {
-        document.title = pageTitlePrefix;
-    } else {
-        // 后备方案：仅更新后缀
-        document.title = translations[lang].title_suffix;
-    }
-    */
-
     // 4. 更新侧边栏导航文字
     updateText('.nav-button[href="sample.html"]', translations[lang].nav_sample);
     updateText('.nav-button[href="commission.html"]', translations[lang].nav_commission);
@@ -433,9 +416,6 @@ function updatePageContent(pageType, lang) {
     }
 }
 
-/**
- * 初始化作品展示页 (sample.html) 的胶囊切换交互
- */
 /**
  * 初始化作品展示页 (sample.html) 的胶囊切换交互
  */
@@ -724,10 +704,6 @@ function initCustomMobilePlayer() {
  * 通用图片轮播组件工厂函数 (Carousel Factory)
  * @param {Object} config - 配置对象
  */
-/**
- * 通用图片轮播组件工厂函数 (Carousel Factory)
- * @param {Object} config - 配置对象
- */
 function createCarousel(config) {
     const track = document.getElementById(config.trackId);
     if (!track) return; // 找不到轨道则退出
@@ -897,7 +873,6 @@ function createCarousel(config) {
  */
 function initAllCarousels() {
     // Carousel A Config (随心所欲)
-    // Carousel A Config (随心所欲)
     createCarousel({
         trackId: 'carouselTrackA',
         prevId: 'carouselPrevA',
@@ -1005,9 +980,6 @@ function initTitleInteraction() {
 
 // ======================================================================================
 // 3. 页面加载完成后执行初始化
-// ======================================================================================
-// ======================================================================================
-// 3. 页面加载完成后执行初始化 & SPA 逻辑
 // ======================================================================================
 document.addEventListener('DOMContentLoaded', () => {
     initGlobal();
@@ -1164,90 +1136,7 @@ function toggleCommissionMode() {
     }
 }
 
-/**
- * 委托申请表单复制功能
- */
-function _deprecated_copyCommissionForm() {
-    let formText = "";
 
-    if (currentCommissionMode === 'general') {
-        // 获取一般委托字段
-        const nickName = document.getElementById('nickName').value.trim();
-        const commType = document.getElementById('commType').value.trim();
-        const budget = document.getElementById('budget').value.trim();
-        const commercial = document.getElementById('commercial').value.trim();
-        const deadline = document.getElementById('deadline').value.trim();
-        const publishDate = document.getElementById('publishDate').value.trim();
-        const refLink = document.getElementById('refLink').value.trim();
-        const requiredInfo = document.getElementById('requiredInfo').value.trim();
-        const optionalInfo = document.getElementById('optionalInfo').value.trim();
-
-        formText = `
-个人委托需求详情表单
---------------------------------
-客户昵称：${nickName}
-委托类型：${commType}
-报酬金额(CNY)：${budget}
-需要商业授权：${commercial}
-截稿日期：${deadline}
-作品发布日期：${publishDate}
-参考外链：${refLink}
-必要要求：${requiredInfo}
-次要要求：${optionalInfo}
---------------------------------
-`;
-    } else {
-        // 获取Live2D委托字段
-        const nickName = document.getElementById('l2d_nickName').value.trim();
-        // 委托类型和商业授权是固定文本
-        const commType = "对称LIVE2D分层立绘";
-        const commercial = "默认获得盈利授权";
-
-        const budget = document.getElementById('l2d_budget').value.trim();
-        const payment = document.getElementById('l2d_payment').value.trim();
-        const deadline = document.getElementById('l2d_deadline').value.trim();
-        const review = document.getElementById('l2d_review').value.trim();
-        const publishDate = document.getElementById('l2d_publishDate').value.trim();
-        const refLink = document.getElementById('l2d_refLink').value.trim();
-        const outer = document.getElementById('l2d_outer').value.trim();
-        const expressions = document.getElementById('l2d_expressions').value.trim();
-        const gestures = document.getElementById('l2d_gestures').value.trim();
-        const requiredInfo = document.getElementById('l2d_requiredInfo').value.trim();
-        const optionalInfo = document.getElementById('l2d_optionalInfo').value.trim();
-
-        formText = `
-LIVE2D委托需求详情表单
---------------------------------
-客户昵称：${nickName}
-报酬金额(CNY)：${budget}
-委托类型：${commType}
-需要商业授权：${commercial}
-支付方式：${payment}
-截稿日期：${deadline}
-检阅过程：${review}
-作品发布日期：${publishDate}
-参考外链：${refLink}
-外套穿脱：${outer}
-替换表情：
-${expressions}
-替换手势：
-${gestures}
-必要要求：
-${requiredInfo}
-次要要求：
-${optionalInfo}
---------------------------------
-`;
-    }
-
-    // 复制到剪贴板
-    navigator.clipboard.writeText(formText).then(() => {
-        alert("表单内容已复制！请前往邮件粘贴发送。\n\n" + formText);
-    }).catch(err => {
-        console.error('复制失败:', err);
-        alert("复制失败，请手动复制。");
-    });
-}
 
 /**
  * 委托申请表单复制功能 (优化版)
